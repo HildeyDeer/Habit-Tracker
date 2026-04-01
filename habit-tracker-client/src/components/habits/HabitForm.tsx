@@ -4,6 +4,7 @@ import { Habit, CreateHabitDto } from '../../types';
 import { useHabitsStore } from '../../stores/habitsStore';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { cn } from '../../lib/utils';
 
 interface HabitFormProps {
   habit?: Habit | null;
@@ -38,49 +39,54 @@ export const HabitForm = ({ habit, onClose }: HabitFormProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">
+    <div className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white dark:bg-dark-surface rounded-2xl shadow-2xl max-w-md w-full p-6 border border-slate-200 dark:border-dark-border">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
             {habit ? 'Редактировать привычку' : 'Новая привычка'}
           </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button
+            onClick={onClose}
+            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+          >
             <X className="w-6 h-6" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Переключатель типа привычки */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
               Тип привычки
             </label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => setFormData({ ...formData, isBad: false })}
-                className={`py-3 rounded-lg border-2 transition-colors ${
+                className={cn(
+                  'py-4 rounded-xl border-2 transition-all duration-200',
                   !formData.isBad
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
+                    ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+                    : 'border-slate-200 dark:border-dark-border hover:border-slate-300 dark:hover:border-dark-border bg-white dark:bg-dark-surface'
+                )}
               >
-                <div className="text-2xl mb-1">✅</div>
-                <div className="text-sm font-medium">Полезная</div>
-                <div className="text-xs text-gray-500">Формирую привычку</div>
+                <div className="text-3xl mb-2">✅</div>
+                <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">Полезная</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Формирую привычку</div>
               </button>
               <button
                 type="button"
                 onClick={() => setFormData({ ...formData, isBad: true })}
-                className={`py-3 rounded-lg border-2 transition-colors ${
+                className={cn(
+                  'py-4 rounded-xl border-2 transition-all duration-200',
                   formData.isBad
-                    ? 'border-red-500 bg-red-50'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
+                    ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
+                    : 'border-slate-200 dark:border-dark-border hover:border-slate-300 dark:hover:border-dark-border bg-white dark:bg-dark-surface'
+                )}
               >
-                <div className="text-2xl mb-1">🚫</div>
-                <div className="text-sm font-medium">Вредная</div>
-                <div className="text-xs text-gray-500">Отказываюсь от привычки</div>
+                <div className="text-3xl mb-2">🚫</div>
+                <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">Вредная</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Отказываюсь от привычки</div>
               </button>
             </div>
           </div>
@@ -111,20 +117,20 @@ export const HabitForm = ({ habit, onClose }: HabitFormProps) => {
             />
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                 Цвет
               </label>
               <input
                 type="color"
                 value={formData.color}
                 onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                className="w-full h-10 rounded-lg cursor-pointer"
+                className="w-full h-11 rounded-xl cursor-pointer border-0 bg-white dark:bg-dark-surface2"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
               Сложность
             </label>
             <div className="flex gap-2">
@@ -133,23 +139,24 @@ export const HabitForm = ({ habit, onClose }: HabitFormProps) => {
                   key={level}
                   type="button"
                   onClick={() => setFormData({ ...formData, difficulty: level })}
-                  className={`flex-1 py-3 rounded-lg border-2 transition-colors ${
+                  className={cn(
+                    'flex-1 py-3 rounded-xl border-2 transition-all duration-200',
                     formData.difficulty === level
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
+                      ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 shadow-lg shadow-primary-500/20'
+                      : 'border-slate-200 dark:border-dark-border hover:border-slate-300 dark:hover:border-dark-border bg-white dark:bg-dark-surface'
+                  )}
                 >
                   <div className="text-2xl mb-1">{difficultyEmojis[level as 1 | 2 | 3]}</div>
-                  <div className="text-sm font-medium">
+                  <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                     {level === 1 ? 'Легко' : level === 2 ? 'Средне' : 'Сложно'}
                   </div>
-                  <div className="text-xs text-gray-500">{level * 10} XP</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{level * 10} XP</div>
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="flex gap-2 pt-4">
+          <div className="flex gap-3 pt-4">
             <Button type="button" variant="secondary" onClick={onClose} className="flex-1">
               Отмена
             </Button>

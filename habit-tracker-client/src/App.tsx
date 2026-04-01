@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
+import { ProfilePage } from './pages/ProfilePage';
 import { PrivateRoute } from './components/PrivateRoute';
 
 function App() {
@@ -15,6 +16,14 @@ function App() {
           element={
             <PrivateRoute>
               <DashboardPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
             </PrivateRoute>
           }
         />

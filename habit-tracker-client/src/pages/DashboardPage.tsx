@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { LogOut, User, Trophy } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { LogOut, User, Flame } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
 import { useHabitsStore } from '../stores/habitsStore';
 import { useGamificationStore } from '../stores/gamificationStore';
@@ -10,6 +10,8 @@ import { StreakDisplay } from '../components/gamification/StreakDisplay';
 import { AchievementsList } from '../components/gamification/AchievementsList';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
+import { ThemeToggle } from '../components/ui/ThemeToggle';
+import { cn } from '../lib/utils';
 
 export const DashboardPage = () => {
   const navigate = useNavigate();
@@ -29,23 +31,28 @@ export const DashboardPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-dark-bg transition-colors duration-300">
       {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-blue-600" />
-            </div>
-            <div>
-              <p className="font-medium">{user?.username}</p>
-              <p className="text-sm text-gray-500">{user?.email}</p>
+      <header className="sticky top-0 z-40 glass border-b border-slate-200/50 dark:border-dark-border/50">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex justify-between items-center">
+            <Link to="/profile" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <div className="hidden sm:flex items-center justify-center w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl shadow-lg shadow-primary-500/30">
+                <User className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="font-bold text-slate-900 dark:text-slate-100">{user?.username}</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">{user?.email}</p>
+              </div>
+            </Link>
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <Button variant="ghost" onClick={handleLogout} size="sm">
+                <LogOut className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Выйти</span>
+              </Button>
             </div>
           </div>
-          <Button variant="ghost" onClick={handleLogout}>
-            <LogOut className="w-5 h-5 mr-2" />
-            Выйти
-          </Button>
         </div>
       </header>
 
@@ -57,24 +64,25 @@ export const DashboardPage = () => {
           </div>
 
           {/* Боковая колонка - геймификация */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             <LevelProgress />
 
             {profile && (
               <Card>
                 <div className="flex items-center gap-2 mb-4">
-                  <Trophy className="w-5 h-5 text-yellow-500" />
-                  <h3 className="font-bold">Статистика</h3>
+                  <Flame className="w-5 h-5 text-orange-500" />
+                  <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">Серии</h3>
                 </div>
                 <StreakDisplay
                   currentStreak={profile.currentStreak}
                   longestStreak={profile.longestStreak}
                 />
-                <div className="mt-4 pt-4 border-t">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Всего выполнений</span>
-                    <span className="font-bold">{profile.totalCompletions}</span>
-                  </div>
+                <div className={cn(
+                  'mt-4 pt-4 border-t border-slate-100 dark:border-dark-border',
+                  'flex justify-between items-center'
+                )}>
+                  <span className="text-sm text-slate-600 dark:text-slate-400">Всего выполнений</span>
+                  <span className="text-lg font-bold text-primary-600 dark:text-primary-400">{profile.totalCompletions}</span>
                 </div>
               </Card>
             )}
