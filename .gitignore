@@ -17,6 +17,9 @@ habit-tracker-client/.env.local
 *.swp
 *.swo
 
+# Qwen
+.qwen/
+
 # OS
 .DS_Store
 Thumbs.db
